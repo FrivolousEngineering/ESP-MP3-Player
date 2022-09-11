@@ -26,6 +26,7 @@ const long intervalCR = 500; //-> interval for updating data received from seria
 unsigned long previous_feedback_time = 0; // Time (in MS) that the last feedback was sent to the webpage
 const long feedback_interval = 500; //-> interval to display the last command in ms
 
+bool led_light_on = false;
 
 bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
 
@@ -117,7 +118,7 @@ void handlePLAYERCMD()
 }
 
 
-void handleFB() 
+void handleFeedbackRequest() 
 {
   String  player_status_feedback = "";
   String volume_string;
@@ -133,7 +134,17 @@ void handleFB()
   unsigned long current_time = millis();
   if (current_time - previous_feedback_time >= feedback_interval) 
   {
-    // save the last time you blinked the LED
+    // Blink the led
+    led_light_on = !led_light_on;
+    
+    if(led_light_on)
+    {
+      digitalWrite(LED_BUILTIN, LOW); // Turn the led on
+    } else
+    {
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+
     previous_feedback_time = current_time;
 
     if (SFB == true) 
@@ -163,6 +174,8 @@ void setup()
 {
   Serial.begin(9600);
   mp3.begin(9600);
+  pinMode(BUILTIN_LED, OUTPUT); // Register built in led
+  
   delay(250);
   
   Serial.println("Begin");
@@ -180,7 +193,7 @@ void setup()
   // Setup callbacks for the various endpoints
   server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
   server.on("/setPLAYER", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
-  server.on("/FBStat", handleFB);  //--> Routine to handle the call procedure handleFB.
+  server.on("/FBStat", handleFeedbackRequest); 
   
   server.begin(); //--> Start server
   Serial.println("HTTP server started\n");
