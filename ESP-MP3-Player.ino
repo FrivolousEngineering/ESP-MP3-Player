@@ -59,9 +59,11 @@ void handlePLAYERCMD()
     if(play_song_on_repeat)
     {
       sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
+      extra_serial_output += "Cycled, Song index = " + String(current_song_index);
     } else
     {
       sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
+      extra_serial_output += "Once, Song index = " + String(current_song_index);
     }
    
     show_player_status = false;
@@ -113,6 +115,7 @@ void handlePLAYERCMD()
     command_last_received = "";
     show_player_status = false;
   }
+  Serial.print("Final command was: ");
   Serial.print(player_status);
   Serial.print(" ");
   Serial.println(extra_serial_output);
