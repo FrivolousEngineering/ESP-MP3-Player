@@ -13,7 +13,7 @@ SoftwareSerial mp3(5,4); // MP3 Player
 static int8_t send_buffer[8] = {0}; //-> Buffer to send commands. 
 static uint8_t answer_buffer[10] = {0}; //-> Buffer to receive response.  
 
-int vol = 30; 
+int volume = 30; 
 
 String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
 String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
@@ -47,6 +47,19 @@ void setSongIndex(int song_index)
   {
     current_song_index = num_total_songs;
   }  
+}
+
+void setVolume(int _volume)
+{
+  volume = _volume;
+  if (volume > 30)
+  { 
+    volume = 30;
+  }
+  if(volume < 0)
+  {
+    volume = 0;
+  }
 }
 
 void handleRoot() 
@@ -96,25 +109,18 @@ void handlePLAYERCMD()
   }
   else if(command == "volume_down") 
   {
-    vol = vol - 2;
-    if (vol < 0) 
-    {
-      vol = 0;
-    }
-    sendCommand(CMD_SET_VOLUME, 0, vol);
+    setVolume(volume - 2);
+    sendCommand(CMD_SET_VOLUME, 0, volume);
     player_status = "volume down";
-    extra_serial_output += "= " + String(vol);
+    extra_serial_output += "= " + String(volume);
   }
   else if(command == "volume_up") 
   {
-    vol = vol + 2;
-    if (vol > 30)
-    { 
-      vol = 30;
-    }
-    sendCommand(CMD_SET_VOLUME, 0, vol);
+    setVolume(volume + 2);
+    
+    sendCommand(CMD_SET_VOLUME, 0, volume);
     player_status = "volume up";
-    extra_serial_output += "= " + String(vol);
+    extra_serial_output += "= " + String(volume);
   }
   else if(command == "stop") 
   {
@@ -139,13 +145,13 @@ void handleStatusRequest()
 {
   String  player_status_feedback = "";
   String volume_string;
-  if (vol < 10) 
+  if (volume < 10) 
   {
-    volume_string = "0" + String(vol);
+    volume_string = "0" + String(volume);
   }
   else 
   {
-    volume_string = String(vol);
+    volume_string = String(volume);
   }
 
   unsigned long current_time = millis();
@@ -216,7 +222,7 @@ void setup()
   delay(250); 
 
   Serial.println("Adjust volume = 30 (highest).");
-  sendCommand(CMD_SET_VOLUME, 0, vol);
+  sendCommand(CMD_SET_VOLUME, 0, volume);
   delay(250);
 
   Serial.println("Requesting num of tracks available");
