@@ -15,7 +15,6 @@ static uint8_t answer_buffer[10] = {0}; //-> Buffer to receive response.
 
 int vol = 30; 
 
-
 String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
 String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
 
@@ -33,10 +32,22 @@ bool show_player_status = false;
 int show_status_counter = 0;
 int num_intervals_to_show_status = 3; // Show the command that was given for this amount of intervals (so this * feedback_update_interval).
 
-int current_song_index = 0;
+int current_song_index = 1;
 int num_total_songs = 0;
 
 bool play_song_on_repeat = false;
+
+void setSongIndex(int song_index)
+{
+  current_song_index = song_index;
+  if(current_song_index > num_total_songs)
+  {
+    current_song_index = 1;
+  } else if(current_song_index < 1)
+  {
+    current_song_index = num_total_songs;
+  }  
+}
 
 void handleRoot() 
 {
@@ -75,12 +86,12 @@ void handlePLAYERCMD()
   }
   else if(command == "previous") 
   {
-    sendCommand(CMD_PREV_SONG);
+    setSongIndex(current_song_index - 1);
     player_status = "previous"; 
   }
   else if(command == "next") 
   {
-    sendCommand(CMD_NEXT_SONG);
+    setSongIndex(current_song_index + 1);
     player_status = "next";
   }
   else if(command == "volume_down") 
