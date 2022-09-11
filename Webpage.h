@@ -69,8 +69,8 @@ const char WEB_PAGE[] PROGMEM = R"=====(
     </div>
     
     <div>
-      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Status: <span id="PLAYERCMD">NA</span></p>
-      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Volume: <span id="volStat">NA</span></p>
+      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Status: <span id="command_display">NA</span></p>
+      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Volume: <span id="volume_display">NA</span></p>
     </div>
 
     <script>
@@ -104,9 +104,9 @@ const char WEB_PAGE[] PROGMEM = R"=====(
             // Example: if the data received for display is "30PLAY", then status = "30PLAY".
             // Then 30PLAY separated into 30 and PLAY.
             
-            document.getElementById("volStat").innerHTML = status.slice(0, 2); // Get the first two characters from the response
+            document.getElementById("volume_display").innerHTML = status.slice(0, 2); // Get the first two characters from the response
             
-            document.getElementById("PLAYERCMD").innerHTML = status.slice(2, status.length); // Retrieve the state (everything that comes after!)
+            document.getElementById("command_display").innerHTML = status.slice(2, status.length); // Retrieve the state (everything that comes after!)
           }
         };
         xhttp.open("GET", "status", true);
