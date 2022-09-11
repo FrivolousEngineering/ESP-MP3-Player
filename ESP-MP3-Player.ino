@@ -46,15 +46,18 @@ void handleRoot()
 void handlePLAYERCMD() 
 {
   String command = server.arg("PLAYERCMD"); //-> Variable string to hold commands from web page.
-  Serial.println();
+  Serial.print("Received command: ");
   Serial.println(command);
+
+  String extra_serial_output = "";
+
   command_last_received = command;
   show_player_status = true;
   if(command == "play")  
   {
     if(play_song_on_repeat)
     {
-       sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
+      sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
     } else
     {
       sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
@@ -62,25 +65,21 @@ void handlePLAYERCMD()
    
     show_player_status = false;
     player_status = "play"; 
-    Serial.println(player_status);
   }
   else if(command == "pause") 
   {
     sendCommand(CMD_PAUSE);
     player_status = "pause"; 
-    Serial.println(player_status);
   }
   else if(command == "previous") 
   {
     sendCommand(CMD_PREV_SONG);
     player_status = "previous"; 
-    Serial.println(player_status);
   }
   else if(command == "next") 
   {
     sendCommand(CMD_NEXT_SONG);
     player_status = "next";
-    Serial.println(player_status);
   }
   else if(command == "volume_down") 
   {
@@ -91,9 +90,7 @@ void handlePLAYERCMD()
     }
     sendCommand(CMD_SET_VOLUME, 0, vol);
     player_status = "volume down";
-    Serial.print(player_status);
-    Serial.print(" = ");
-    Serial.println(vol);
+    extra_serial_output += "= " + String(vol);
   }
   else if(command == "volume_up") 
   {
@@ -104,21 +101,21 @@ void handlePLAYERCMD()
     }
     sendCommand(CMD_SET_VOLUME, 0, vol);
     player_status = "volume up";
-    Serial.print(player_status);
-    Serial.print(" = ");
-    Serial.println(vol);
+    extra_serial_output += "= " + String(vol);
   }
   else if(command == "stop") 
   {
     sendCommand(CMD_STOP_PLAY);
     player_status = "stop";
-    Serial.println(player_status);
-    Serial.println();
   } else
   {
     command_last_received = "";
     show_player_status = false;
   }
+  Serial.print(player_status);
+  Serial.print(" ");
+  Serial.println(extra_serial_output);
+  
   server.send(200, "text/plane", "");
 }
 
@@ -289,11 +286,9 @@ String decodeMP3Answer()
     cnt_3d++;
     if (cnt_3d == 2) 
     {
-      Serial.println();
       player_status = "stop"; 
       command_last_received = player_status;
-      Serial.println(player_status);
-      Serial.println();
+      Serial.println("MP3 player told us that STOP happend");
       cnt_3d = 0;
     }
   }
