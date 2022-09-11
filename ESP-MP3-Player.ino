@@ -20,11 +20,11 @@ int cnt_3d = 0; //-> Variable as an indicator to continue to the next playback a
 String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
 String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
 
-unsigned long previousMillisCR = 0; //-> save the last time the data was received from the serial mp3 module.
-const long intervalCR = 500; //-> interval for updating data received from serial mp3 player.
+unsigned long previous_mp3_time = 0; //-> save the last time the data was received from the serial mp3 module.
+const long mp3_update_interval = 500; //-> interval for updating data received from serial mp3 player.
 
 unsigned long previous_feedback_time = 0; // Time (in MS) that the last feedback was sent to the webpage
-const long feedback_interval = 500; //-> interval to display the last command in ms
+const long feedback_update_interval = 500; //-> interval to display the last command in ms
 
 bool led_light_on = false;
 
@@ -132,7 +132,7 @@ void handleStatusRequest()
   }
 
   unsigned long current_time = millis();
-  if (current_time - previous_feedback_time >= feedback_interval) 
+  if (current_time - previous_feedback_time >= feedback_update_interval) 
   {
     // Blink the led
     led_light_on = !led_light_on;
@@ -215,11 +215,10 @@ void loop()
 {
   server.handleClient();  
 
-  unsigned long currentMillisCR = millis();
-  if (currentMillisCR - previousMillisCR >= intervalCR) 
+  unsigned long current_time = millis();
+  if (current_time - previous_mp3_time >= mp3_update_interval) 
   {
-    // save the last time the data was received from the serial mp3 module.
-    previousMillisCR = currentMillisCR;
+    previous_mp3_time = current_time;
 
     // Check response.
     if (mp3.available())
