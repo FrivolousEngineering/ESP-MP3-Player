@@ -17,8 +17,8 @@ int vol = 30;
 
 int cnt_3d = 0; //-> Variable as an indicator to continue to the next playback after the previous playback is finished.
 
-String PLAYERStatus = "STOP"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
-String PlayerStatSend = "STOP"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
+String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
+String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
 
 unsigned long previousMillisCR = 0; //-> save the last time the data was received from the serial mp3 module.
 const long intervalCR = 500; //-> interval for updating data received from serial mp3 player.
@@ -29,7 +29,7 @@ const long feedback_interval = 500; //-> interval to display the last command in
 
 bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
 
-bool SFB = false; //-> The bool variable for creating conditions displays the PlayerStatSend and PLAYERStatus variables on a web page.
+bool SFB = false;
 int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
 
 void handleRoot() 
@@ -42,39 +42,35 @@ void handlePLAYERCMD()
   String command = server.arg("PLAYERCMD"); //-> Variable string to hold commands from web page.
   Serial.println();
   Serial.println(command);
+  command_last_received = command;
+  SFB = true;
   if(command == "play")  
   {
     sendCommand(CMD_PLAY);
-    PlayerStatSend = "PLAY";
-    PLAYERStatus = "PLAY"; 
-    Serial.println(PLAYERStatus);
+    SFB = false;
+    player_status = "play"; 
+    Serial.println(player_status);
     Serial.println();
   }
   else if(command == "pause") 
   {
     sendCommand(CMD_PAUSE);
-    SFB = true;
-    PlayerStatSend = "PAUSE";
-    PLAYERStatus = "PAUSE"; 
-    Serial.println(PLAYERStatus);
+    player_status = "pause"; 
+    Serial.println(player_status);
     Serial.println();
   }
   else if(command == "previous") 
   {
     sendCommand(CMD_PREV_SONG);
-    SFB = true;
-    PlayerStatSend = "PLAY";
-    PLAYERStatus = "PREV"; 
-    Serial.println(PLAYERStatus);
+    player_status = "previous"; 
+    Serial.println(player_status);
     Serial.println();
   }
   else if(command == "next") 
   {
     sendCommand(CMD_NEXT_SONG);
-    SFB = true;
-    PlayerStatSend = "PLAY";
-    PLAYERStatus = "NEXT";
-    Serial.println(PLAYERStatus);
+    player_status = "next";
+    Serial.println(player_status);
     Serial.println();
   }
   else if(command == "volume_down") 
@@ -85,9 +81,8 @@ void handlePLAYERCMD()
       vol = 0;
     }
     sendCommand(CMD_SET_VOLUME, 0, vol);
-    SFB = true;
-    PLAYERStatus = "VOLUME DOWN";
-    Serial.print(PLAYERStatus);
+    player_status = "volume down";
+    Serial.print(player_status);
     Serial.print(" = ");
     Serial.println(vol);
     Serial.println();
@@ -100,9 +95,8 @@ void handlePLAYERCMD()
       vol = 30;
     }
     sendCommand(CMD_SET_VOLUME, 0, vol);
-    SFB = true;
-    PLAYERStatus = "VOLUME UP";
-    Serial.print(PLAYERStatus);
+    player_status = "volume up";
+    Serial.print(player_status);
     Serial.print(" = ");
     Serial.println(vol);
     Serial.println();
@@ -110,11 +104,13 @@ void handlePLAYERCMD()
   else if(command == "stop") 
   {
     sendCommand(CMD_STOP_PLAY);
-    SFB = true;
-    PlayerStatSend = "STOP";
-    PLAYERStatus = "STOP";
-    Serial.println(PLAYERStatus);
+    player_status = "stop";
+    Serial.println(player_status);
     Serial.println();
+  } else
+  {
+    command_last_received = "";
+    SFB = false;
   }
 
   server.send(200, "text/plane", "");
@@ -153,11 +149,11 @@ void handleFB()
 
   if (SFB == true) 
   {
-    player_status_feedback = PLAYERStatus;
+    player_status_feedback = player_status;
   }
   else 
   {
-    player_status_feedback = PlayerStatSend;
+    player_status_feedback = command_last_received;
   }
 
   server.send(200, "text/plane", volume_string + player_status_feedback); 
@@ -273,9 +269,9 @@ String decodeMP3Answer()
     if (cnt_3d == 2) 
     {
       Serial.println();
-      PLAYERStatus = "STOP"; 
-      PlayerStatSend = PLAYERStatus;
-      Serial.println(PLAYERStatus);
+      player_status = "stop"; 
+      command_last_received = player_status;
+      Serial.println(player_status);
       Serial.println();
       cnt_3d = 0;
     }
