@@ -1,5 +1,6 @@
 #include <ESP8266WebServer.h>
 #include <SoftwareSerial.h>
+#include <array>
 
 #include "Webpage.h" //-> Include the contents of the User Interface Web page, stored in the same folder as the .ino file
 #include "MP3Commands.h"
@@ -37,6 +38,8 @@ int num_total_songs = 0;
 
 bool play_song_on_repeat = false;
 
+std::array<String, 5> track_names = {"Song One", "Song Two", "Song Three", "Song Four", "Song Five"};
+
 void setSongIndex(int song_index)
 {
   current_song_index = song_index;
@@ -69,7 +72,7 @@ void handleRoot()
 
 void handlePLAYERCMD() 
 {
-  String command = server.arg("PLAYERCMD"); //-> Variable string to hold commands from web page.
+  String command = server.arg("cmd"); //-> Variable string to hold commands from web page.
   Serial.print("Received command: ");
   Serial.println(command);
 
@@ -181,7 +184,15 @@ void handleStatusRequest()
     player_status_feedback = command_last_received;
   }
 
-  server.send(200, "text/plane", volume_string + "," + player_status_feedback); 
+  server.send(200, "text/plane", volume_string + "," + player_status_feedback + "," + getTrackName(current_song_index)); 
+}
+
+String getTrackName(int index)
+{
+  int index_to_use = index - 1;
+  if(index_to_use < 0) index_to_use = 0;
+  if(index_to_use > track_names.size() -1) index_to_use = track_names.size() - 1;
+  return track_names[index_to_use];  
 }
 
 void setup()
@@ -202,7 +213,7 @@ void setup()
   
   // Setup callbacks for the various endpoints
   server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
-  server.on("/setPLAYER", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
+  server.on("/command", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
   server.on("/status", handleStatusRequest); 
   
   server.begin(); //--> Start server

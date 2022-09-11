@@ -59,29 +59,30 @@ const char WEB_PAGE[] PROGMEM = R"=====(
   
   <body>
     <div>
-      <button type="button" class="buttonPLAY" onclick="sendData('play')">PLAY</button>
-      <button type="button" class="buttonPAUSE" onclick="sendData('pause')">PAUSE</button>
-      <button type="button" class="buttonPREV" onclick="sendData('previous')">PREV</button>
-      <button type="button" class="buttonNEXT" onclick="sendData('next')">NEXT</button>
-      <button type="button" class="buttonVolume" onclick="sendData('volume_down')">VOLUME -</button>
-      <button type="button" class="buttonVolume" onclick="sendData('volume_up')">VOLUME +</button>
-      <button type="button" class="buttonSTOP" onclick="sendData('stop')">STOP</button><br>
+      <button type="button" class="buttonPLAY" onclick="sendCommand('play')">PLAY</button>
+      <button type="button" class="buttonPAUSE" onclick="sendCommand('pause')">PAUSE</button>
+      <button type="button" class="buttonPREV" onclick="sendCommand('previous')">PREV</button>
+      <button type="button" class="buttonNEXT" onclick="sendCommand('next')">NEXT</button>
+      <button type="button" class="buttonVolume" onclick="sendCommand('volume_down')">VOLUME -</button>
+      <button type="button" class="buttonVolume" onclick="sendCommand('volume_up')">VOLUME +</button>
+      <button type="button" class="buttonSTOP" onclick="sendCommand('stop')">STOP</button><br>
     </div>
     
     <div>
       <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Status: <span id="command_display">NA</span></p>
       <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Volume: <span id="volume_display">NA</span></p>
+      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Current track: <span id="track_name">NA</span></p>
     </div>
 
     <script>
-      function sendData(CMD) 
+      function sendCommand(CMD) 
       {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() 
         {
           if (this.readyState == 4 && this.status == 200) {}  
         };
-        xhttp.open("GET", "setPLAYER?PLAYERCMD=" + CMD, true);
+        xhttp.open("GET", "command?cmd=" + CMD, true);
         xhttp.send(); 
       }
 
@@ -101,14 +102,13 @@ const char WEB_PAGE[] PROGMEM = R"=====(
             var status = "";
             status = this.responseText;
             
-            // Example: if the data received for display is "30PLAY", then status = "30PLAY".
-            // Then 30PLAY separated into 30 and PLAY.
-
+            // Example: if the data received for display is "30,PLAY", then status = "30,PLAY".
             var splitted = status.split(",");
             
             document.getElementById("volume_display").innerHTML = splitted[0]
-            
             document.getElementById("command_display").innerHTML = splitted[1]
+            document.getElementById("track_name").innerHTML = splitted[2]
+            
           }
         };
         xhttp.open("GET", "status", true);
