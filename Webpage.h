@@ -11,197 +11,66 @@ const char WEB_PAGE[] PROGMEM = R"=====(
         margin: 0px auto;
         text-align: center;
       }
+      button
+      {
+      	display: inline-block;
+        padding: 15px 25px;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        border: none;
+        border-radius: 15px;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px #999;
+      }
       
-      .buttonPLAY 
+      button:active
       {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
-      .buttonPLAY:hover {background-color: #3e8e41}
-      .buttonPLAY:active 
-      {
-        background-color: #3e8e41;
-        box-shadow: 0 1px #666;
+      	box-shadow: 0 1px #666;
         transform: translateY(4px);
       }
+      
+      .buttonPLAY { background-color: #4CAF50 }
+      .buttonPLAY:hover { background-color: #3e8e41 }
 
-      .buttonPAUSE 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #f8b24f;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
+      .buttonPAUSE { background-color: #f8b24f }
       .buttonPAUSE:hover {background-color: #dda049}
-      .buttonPAUSE:active 
-      {
-        background-color: #dda049;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
 
-      .buttonPREV 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #1b6ca8;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
-      .buttonPREV:hover {background-color: #185b8f}
-      .buttonPREV:active 
-      {
-        background-color: #185b8f;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
+      .buttonPREV { background-color: #1b6ca8 }
+      .buttonPREV:hover { background-color: #185b8f }
 
-      .buttonNEXT 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #1b6ca8;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
+      .buttonNEXT { background-color: #1b6ca8 }
+      .buttonNEXT:hover { background-color: #185b8f }
 
-      .buttonNEXT:hover {background-color: #185b8f}
-
-      .buttonNEXT:active 
-      {
-        background-color: #185b8f;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
-
-      .buttonVOLDOWN 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #0a97b0;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
-
+      .buttonVolume { background-color: #0a97b0; }
       .buttonVOLDOWN:hover {background-color: #0b889e}
       
-      .buttonVOLDOWN:active 
-      {
-        background-color: #0b889e;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
 
-      .buttonVOLUP 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #0a97b0;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
-      
-      .buttonVOLUP:hover {background-color: #0b889e}
-      
-      .buttonVOLUP:active {
-        background-color: #0b889e;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
+      .buttonSTOP { background-color: #e74c3c }
+      .buttonSTOP:hover { background-color: #c0392b }
 
-      .buttonSTOP 
-      {
-        display: inline-block;
-        padding: 15px 25px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-        outline: none;
-        color: #fff;
-        background-color: #e74c3c;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px #999;
-      }
-      .buttonSTOP:hover {background-color: #c0392b}
-      .buttonSTOP:active 
-      {
-        background-color: #c0392b;
-        box-shadow: 0 1px #666;
-        transform: translateY(4px);
-      }
     </style>
   </head>
   
   <body>
     <div>
-      <h2>NodeMCU ESP8266 Local Web Server Controlling Serial MP3 Player</h2><br>
       <button type="button" class="buttonPLAY" onclick="sendData('play')">PLAY</button>
       <button type="button" class="buttonPAUSE" onclick="sendData('pause')">PAUSE</button>
       <button type="button" class="buttonPREV" onclick="sendData('previous')">PREV</button>
       <button type="button" class="buttonNEXT" onclick="sendData('next')">NEXT</button>
-      <button type="button" class="buttonVOLDOWN" onclick="sendData('volume_down')">VOLUME -</button>
-      <button type="button" class="buttonVOLUP" onclick="sendData('volume_up')">VOLUME +</button>
+      <button type="button" class="buttonVolume" onclick="sendData('volume_down')">VOLUME -</button>
+      <button type="button" class="buttonVolume" onclick="sendData('volume_up')">VOLUME +</button>
       <button type="button" class="buttonSTOP" onclick="sendData('stop')">STOP</button><br>
     </div>
     
     <div>
-      <p style="color:#2c3e50;font-weight: bold;font-size: 24px;">MP3 Player Status is : <span id="PLAYERCMD">NA</span></p>
-      <p style="color:#2c3e50;font-weight: bold;font-size: 24px;">Volume Level : <span id="volStat">NA</span></p>
+      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Status: <span id="PLAYERCMD">NA</span></p>
+      <p style="color:#2c3e50;font-weight: bold;font-size: 20px;">Volume: <span id="volStat">NA</span></p>
     </div>
 
     <script>
