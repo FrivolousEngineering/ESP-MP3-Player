@@ -36,6 +36,8 @@ int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
 int current_song_index = 0;
 int num_total_songs = 0;
 
+bool play_song_on_repeat = false;
+
 void handleRoot() 
 {
   server.send(200, "text/html", WEB_PAGE); //-> Send web page
@@ -50,32 +52,35 @@ void handlePLAYERCMD()
   show_player_status = true;
   if(command == "play")  
   {
-    sendCommand(CMD_PLAY);
+    if(play_song_on_repeat)
+    {
+       sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
+    } else
+    {
+      sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
+    }
+   
     show_player_status = false;
     player_status = "play"; 
     Serial.println(player_status);
-    Serial.println();
   }
   else if(command == "pause") 
   {
     sendCommand(CMD_PAUSE);
     player_status = "pause"; 
     Serial.println(player_status);
-    Serial.println();
   }
   else if(command == "previous") 
   {
     sendCommand(CMD_PREV_SONG);
     player_status = "previous"; 
     Serial.println(player_status);
-    Serial.println();
   }
   else if(command == "next") 
   {
     sendCommand(CMD_NEXT_SONG);
     player_status = "next";
     Serial.println(player_status);
-    Serial.println();
   }
   else if(command == "volume_down") 
   {
@@ -89,7 +94,6 @@ void handlePLAYERCMD()
     Serial.print(player_status);
     Serial.print(" = ");
     Serial.println(vol);
-    Serial.println();
   }
   else if(command == "volume_up") 
   {
@@ -103,7 +107,6 @@ void handlePLAYERCMD()
     Serial.print(player_status);
     Serial.print(" = ");
     Serial.println(vol);
-    Serial.println();
   }
   else if(command == "stop") 
   {
