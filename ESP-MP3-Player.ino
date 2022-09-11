@@ -30,12 +30,12 @@ bool led_light_on = false;
 
 bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
 
-bool SFB = false;
+bool show_player_status = false;
 int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
 
 void handleRoot() 
 {
-  server.send(200, "text/html", MAIN_page); //-> Send web page
+  server.send(200, "text/html", WEB_PAGE); //-> Send web page
 }
 
 void handlePLAYERCMD() 
@@ -44,11 +44,11 @@ void handlePLAYERCMD()
   Serial.println();
   Serial.println(command);
   command_last_received = command;
-  SFB = true;
+  show_player_status = true;
   if(command == "play")  
   {
     sendCommand(CMD_PLAY);
-    SFB = false;
+    show_player_status = false;
     player_status = "play"; 
     Serial.println(player_status);
     Serial.println();
@@ -111,14 +111,14 @@ void handlePLAYERCMD()
   } else
   {
     command_last_received = "";
-    SFB = false;
+    show_player_status = false;
   }
 
   server.send(200, "text/plane", "");
 }
 
 
-void handleFeedbackRequest() 
+void handleStatusRequest() 
 {
   String  player_status_feedback = "";
   String volume_string;
@@ -147,18 +147,18 @@ void handleFeedbackRequest()
 
     previous_feedback_time = current_time;
 
-    if (SFB == true) 
+    if (show_player_status == true) 
     {
       intv++;
       if (intv > 3) 
       {
-        SFB = false;
+        show_player_status = false;
         intv = 0;
       }
     }
   }
 
-  if (SFB == true) 
+  if (show_player_status == true) 
   {
     player_status_feedback = player_status;
   }
@@ -193,7 +193,7 @@ void setup()
   // Setup callbacks for the various endpoints
   server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
   server.on("/setPLAYER", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
-  server.on("/FBStat", handleFeedbackRequest); 
+  server.on("/status", handleStatusRequest); 
   
   server.begin(); //--> Start server
   Serial.println("HTTP server started\n");
