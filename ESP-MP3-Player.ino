@@ -23,12 +23,11 @@ String PlayerStatSend = "STOP"; //-> Variable string for playback status "PLAY" 
 unsigned long previousMillisCR = 0; //-> save the last time the data was received from the serial mp3 module.
 const long intervalCR = 500; //-> interval for updating data received from serial mp3 player.
 
-unsigned long previousMillisFB = 0; //-> save the last time the command was sent from the web page to be displayed on the web page.
-const long intervalFB = 500; //-> interval to display the last command.
+unsigned long previous_feedback_time = 0; // Time (in MS) that the last feedback was sent to the webpage
+const long feedback_interval = 500; //-> interval to display the last command in ms
 
-// Variable as an indicator to get feedback from the Serial MP3 Module.
-// In this project not all feedback from the Serial MP3 Player is used. So feedback is only activated at the beginning, then deactivated.
-bool FFB = true;
+
+bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
 
 bool SFB = false; //-> The bool variable for creating conditions displays the PlayerStatSend and PLAYERStatus variables on a web page.
 int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
@@ -124,22 +123,22 @@ void handlePLAYERCMD()
 
 void handleFB() 
 {
-  String  PlayerStatFB = "";
-  String str_vol;
+  String  player_status_feedback = "";
+  String volume_string;
   if (vol < 10) 
   {
-    str_vol = "0" + String(vol);
+    volume_string = "0" + String(vol);
   }
   else 
   {
-    str_vol = String(vol);
+    volume_string = String(vol);
   }
 
-  unsigned long currentMillisFB = millis();
-  if (currentMillisFB - previousMillisFB >= intervalFB) 
+  unsigned long current_time = millis();
+  if (current_time - previous_feedback_time >= feedback_interval) 
   {
     // save the last time you blinked the LED
-    previousMillisFB = currentMillisFB;
+    previous_feedback_time = current_time;
 
     if (SFB == true) 
     {
@@ -154,15 +153,14 @@ void handleFB()
 
   if (SFB == true) 
   {
-    PlayerStatFB = PLAYERStatus;
+    player_status_feedback = PLAYERStatus;
   }
   else 
   {
-    PlayerStatFB = PlayerStatSend;
+    player_status_feedback = PlayerStatSend;
   }
 
-  server.send(200, "text/plane", str_vol + PlayerStatFB); 
-  // Example: If str_vol = 30 and PlayerStatFB = "PLAY", then the data sent for display is "30PLAY".
+  server.send(200, "text/plane", volume_string + player_status_feedback); 
 }
 
 void setup()
