@@ -28,7 +28,7 @@ const long feedback_update_interval = 500; //-> interval to display the last com
 
 bool led_light_on = false;
 
-bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
+bool should_request_mp3_feedback = true; 
 
 bool show_player_status = false;
 int show_status_counter = 0;
@@ -213,7 +213,7 @@ void setup()
   Serial.println("Requesting num of tracks available");
   sendCommand(CMD_QUERY_TOT_TRACKS);
 
-  FFB = false;
+  should_request_mp3_feedback = false;
 }
 
 void loop()
@@ -310,7 +310,7 @@ void sendCommand(byte command, byte dat1, byte dat2)
   send_buffer[3] = command; //-> Such as PLAY and PAUSE and so on
   
   // 0x01 = feedback && 0x00 -> No feedback
-  if (FFB == true) 
+  if (should_request_mp3_feedback == true) 
   {
     send_buffer[4] = 0x01;
   }
