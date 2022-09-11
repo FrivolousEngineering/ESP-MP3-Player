@@ -15,6 +15,7 @@ static uint8_t answer_buffer[10] = {0}; //-> Buffer to receive response.
 
 int vol = 30; 
 
+
 String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
 String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
 
@@ -50,7 +51,6 @@ void handlePLAYERCMD()
 
   String extra_serial_output = "";
 
-  
   show_player_status = true;
   if(command == "play")  
   {
@@ -250,6 +250,8 @@ String decodeMP3Answer()
 
     case 0x40:
       decodedMP3Answer += " -> Error";
+      show_player_status = true;
+      command_last_received = "error";
       break;
 
     case 0x41:
