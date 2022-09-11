@@ -70,7 +70,7 @@ void handleRoot()
   server.send(200, "text/html", WEB_PAGE); //-> Send web page
 }
 
-void handlePLAYERCMD() 
+void handleCommand() 
 {
   String command = server.arg("cmd"); //-> Variable string to hold commands from web page.
   Serial.print("Received command: ");
@@ -219,7 +219,7 @@ void setup()
   
   // Setup callbacks for the various endpoints
   server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
-  server.on("/command", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
+  server.on("/command", handleCommand);  //--> Routine to handle the call procedure handlePLAYERCMD.
   server.on("/status", handleStatusRequest); 
   
   server.begin(); //--> Start server
