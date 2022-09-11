@@ -170,8 +170,6 @@ void handleCommand()
   server.send(200, "text/plane", "");
 }
 
-
-
 void handleSetTrack()
 {
   server.send(200, "text/plane", "");
@@ -390,7 +388,6 @@ void sendCommand(byte command, byte dat1, byte dat2)
     mp3.write(send_buffer[i]) ;
     Serial.print(sbyte2hex(send_buffer[i]));
   }
-  
   Serial.println();
 }
 
@@ -442,7 +439,6 @@ String sanswer(void)
     uint8_t b = mp3.read();
     answer_buffer[i] = b;
     i++;
-
     mp3answer += sbyte2hex(b);
   }
 
