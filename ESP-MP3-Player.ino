@@ -1,4 +1,5 @@
 #include <ESP8266WebServer.h>
+#include <DNSServer.h>
 #include <SoftwareSerial.h>
 #include <array>
 
@@ -8,6 +9,10 @@
 const char* ssid = "grove";
 const char* password = "";
 
+const byte DNS_PORT = 53;
+IPAddress APIP(172, 0, 0, 1); // Gateway
+
+DNSServer dnsServer;
 ESP8266WebServer server(80); 
 SoftwareSerial mp3(5,4); // MP3 Player
 
@@ -236,9 +241,12 @@ void setup()
   pinMode(BUILTIN_LED, OUTPUT); // Register built in led
 
   Serial.println("Begin");
-
+  
+  WiFi.mode(WIFI_AP);
+  WiFi.softAPConfig(APIP, APIP, IPAddress(255, 255, 255, 0));
   WiFi.softAP(ssid, password);  // Start the soft Acces Point
-
+  dnsServer.start(DNS_PORT, "*", APIP); // DNS spoofing (Only for HTTP)
+  
   IPAddress our_ip = WiFi.softAPIP(); 
   Serial.print("Connect your wifi laptop/mobile phone to this NodeMCU Access Point : ");
   Serial.println(ssid);
@@ -251,8 +259,9 @@ void setup()
   server.on("/track", handleSetTrack);  
   server.on("/status", handleStatusRequest); 
   server.on("/allTrackNames", handleAllTrackNames);
+  server.onNotFound([]() { handleRoot(); }); // This is what triggers the captive portal. 
+  server.begin();
   
-  server.begin(); //--> Start server
   Serial.println("HTTP server started\n");
   
   Serial.println("Select storage device to TF card.");
@@ -271,6 +280,7 @@ void setup()
 
 void loop()
 {
+  dnsServer.processNextRequest();
   server.handleClient();  
 
   unsigned long current_time = millis();
