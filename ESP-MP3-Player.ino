@@ -81,14 +81,20 @@ void handlePLAYERCMD()
   show_player_status = true;
   if(command == "play")  
   {
-    if(play_song_on_repeat)
+    if(player_status == "pause")
     {
-      sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
-      extra_serial_output += "Cycled, Song index = " + String(current_song_index);
-    } else
+      sendCommand(CMD_PLAY);
+    } else 
     {
-      sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
-      extra_serial_output += "Once, Song index = " + String(current_song_index);
+      if(play_song_on_repeat)
+      {
+        sendCommand(CMD_SNG_CYCL_PLAY, 0, current_song_index);
+        extra_serial_output += "Cycled, Song index = " + String(current_song_index);
+      } else
+      {
+        sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
+        extra_serial_output += "Once, Song index = " + String(current_song_index);
+      }
     }
     command_last_received = command;
     show_player_status = false;
@@ -192,7 +198,7 @@ String getTrackName(int index)
   int index_to_use = index - 1;
   if(index_to_use < 0) index_to_use = 0;
   if(index_to_use > track_names.size() -1) index_to_use = track_names.size() - 1;
-  return track_names[index_to_use];  
+  return track_names[index_to_use];
 }
 
 void setup()
