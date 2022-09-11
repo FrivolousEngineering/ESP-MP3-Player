@@ -31,7 +31,8 @@ bool led_light_on = false;
 bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3 Module.
 
 bool show_player_status = false;
-int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
+int show_status_counter = 0;
+int num_intervals_to_show_status = 3; // Show the command that was given for this amount of intervals (so this * feedback_update_interval).
 
 int current_song_index = 0;
 int num_total_songs = 0;
@@ -151,11 +152,11 @@ void handleStatusRequest()
 
     if (show_player_status == true) 
     {
-      intv++;
-      if (intv > 3) 
+      show_status_counter++;
+      if (show_status_counter > num_intervals_to_show_status) 
       {
         show_player_status = false;
-        intv = 0;
+        show_status_counter = 0;
       }
     }
   }
@@ -215,7 +216,6 @@ void setup()
   FFB = false;
 }
 
-
 void loop()
 {
   server.handleClient();  
@@ -232,7 +232,6 @@ void loop()
     }
   }
 }
-
 
 // The meaning of the mp3 player module response
 String decodeMP3Answer() 
