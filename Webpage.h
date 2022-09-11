@@ -11,8 +11,6 @@ const char WEB_PAGE[] PROGMEM = R"=====(
         margin: 0px auto;
         text-align: center;
       }
-
-      h1 { font-size: 2.0rem; color:#2980b9;}
       
       .buttonPLAY 
       {
@@ -30,9 +28,9 @@ const char WEB_PAGE[] PROGMEM = R"=====(
         border-radius: 15px;
         box-shadow: 0 5px #999;
       }
-        .buttonPLAY:hover {background-color: #3e8e41}
+      .buttonPLAY:hover {background-color: #3e8e41}
       .buttonPLAY:active 
-    {
+      {
         background-color: #3e8e41;
         box-shadow: 0 1px #666;
         transform: translateY(4px);
@@ -191,7 +189,6 @@ const char WEB_PAGE[] PROGMEM = R"=====(
   
   <body>
     <div>
-      <h1>LoLin NodeMCU 12E ESP8266 + Serial MP3 Player</h1>
       <h2>NodeMCU ESP8266 Local Web Server Controlling Serial MP3 Player</h2><br>
       <button type="button" class="buttonPLAY" onclick="sendData('play')">PLAY</button>
       <button type="button" class="buttonPAUSE" onclick="sendData('pause')">PAUSE</button>
