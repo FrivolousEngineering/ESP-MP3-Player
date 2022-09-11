@@ -81,6 +81,11 @@ String getAllTracksAsString()
   return result.substring(0, result.length() - 1);
 }
 
+void handleAllTrackNames()
+{
+  server.send(200, "text/plane", getAllTracksAsString());
+}
+
 void handleCommand() 
 {
   String command = server.arg("cmd"); //-> Variable string to hold commands from web page.
@@ -160,6 +165,18 @@ void handleCommand()
   server.send(200, "text/plane", "");
 }
 
+
+
+void handleSetTrack()
+{
+  server.send(200, "text/plane", "");
+  String track_number = server.arg("t"); 
+  Serial.print("Attempting to set index to:");
+  Serial.println(track_number.toInt());
+  setSongIndex(track_number.toInt());
+}
+
+
 void handleStatusRequest() 
 {
   String  player_status_feedback = "";
@@ -229,9 +246,11 @@ void setup()
   Serial.println(our_ip); 
   
   // Setup callbacks for the various endpoints
-  server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
-  server.on("/command", handleCommand);  //--> Routine to handle the call procedure handlePLAYERCMD.
+  server.on("/", handleRoot); 
+  server.on("/command", handleCommand);
+  server.on("/track", handleSetTrack);  
   server.on("/status", handleStatusRequest); 
+  server.on("/allTrackNames", handleAllTrackNames);
   
   server.begin(); //--> Start server
   Serial.println("HTTP server started\n");

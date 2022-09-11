@@ -66,6 +66,14 @@ const char WEB_PAGE[] PROGMEM = R"=====(
       <button type="button" class="buttonVolume" onclick="sendCommand('volume_down')">VOLUME -</button>
       <button type="button" class="buttonVolume" onclick="sendCommand('volume_up')">VOLUME +</button>
       <button type="button" class="buttonSTOP" onclick="sendCommand('stop')">STOP</button><br>
+      <br>
+      <form action="/track" id = "track_selector_form">
+        <label for="cars">Select a track:</label>
+        <select name="track_selector" id="track_selector"> </select>
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+      
     </div>
     
     <div>
@@ -75,6 +83,22 @@ const char WEB_PAGE[] PROGMEM = R"=====(
     </div>
 
     <script>
+      const form  = document.getElementById('track_selector_form');
+
+      form.addEventListener('submit', (event) => {
+          // handle the form data
+          event.preventDefault();
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() 
+          {
+            if (this.readyState == 4 && this.status == 200) {}  
+          };
+          var track_selector = document.getElementById("track_selector")
+          xhttp.open("GET", "track?t=" + track_selector.value, true);
+          xhttp.send();
+      });
+
+
       function sendCommand(CMD) 
       {
         var xhttp = new XMLHttpRequest();
@@ -92,6 +116,31 @@ const char WEB_PAGE[] PROGMEM = R"=====(
         requestStatus();
       }, 100);
 
+      function requestTrackNames()
+      {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() 
+        {
+          if (this.readyState == 4 && this.status == 200) 
+          {
+            var status = "";
+            status = this.responseText;
+            var splitted = status.split(",");
+
+            var track_selector = document.getElementById("track_selector")
+            for (let index = 0; index < splitted.length; ++index)
+            {
+              var option = document.createElement("option")
+              option.value = index + 1;
+              option.innerHTML = splitted[index];
+              track_selector.appendChild(option);
+            }
+          }
+        }
+        xhttp.open("GET", "allTrackNames", true);
+        xhttp.send();
+      }
+
       function requestStatus() 
       {
         var xhttp = new XMLHttpRequest();
@@ -101,8 +150,7 @@ const char WEB_PAGE[] PROGMEM = R"=====(
           {
             var status = "";
             status = this.responseText;
-            
-            // Example: if the data received for display is "30,PLAY", then status = "30,PLAY".
+
             var splitted = status.split(",");
             
             document.getElementById("volume_display").innerHTML = splitted[0]
@@ -114,6 +162,8 @@ const char WEB_PAGE[] PROGMEM = R"=====(
         xhttp.open("GET", "status", true);
         xhttp.send();
       }
+
+      requestTrackNames();
     </script>
   </body>
 </html>
