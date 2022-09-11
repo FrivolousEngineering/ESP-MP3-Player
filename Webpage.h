@@ -174,13 +174,13 @@ const char MAIN_page[] PROGMEM = R"=====(
     <div>
       <h1>LoLin NodeMCU 12E ESP8266 + Serial MP3 Player</h1>
       <h2>NodeMCU ESP8266 Local Web Server Controlling Serial MP3 Player</h2><br>
-      <button type="button" class="buttonPLAY" onclick="sendData('PY')">PLAY</button>
-      <button type="button" class="buttonPAUSE" onclick="sendData('PE')">PAUSE</button>
-      <button type="button" class="buttonPREV" onclick="sendData('PV')">PREV</button>
-      <button type="button" class="buttonNEXT" onclick="sendData('NT')">NEXT</button>
-      <button type="button" class="buttonVOLDOWN" onclick="sendData('VD')">VOLUME -</button>
-      <button type="button" class="buttonVOLUP" onclick="sendData('VU')">VOLUME +</button>
-      <button type="button" class="buttonSTOP" onclick="sendData('SP')">STOP</button><br>
+      <button type="button" class="buttonPLAY" onclick="sendData('play')">PLAY</button>
+      <button type="button" class="buttonPAUSE" onclick="sendData('pause')">PAUSE</button>
+      <button type="button" class="buttonPREV" onclick="sendData('previous')">PREV</button>
+      <button type="button" class="buttonNEXT" onclick="sendData('next')">NEXT</button>
+      <button type="button" class="buttonVOLDOWN" onclick="sendData('volume_down')">VOLUME -</button>
+      <button type="button" class="buttonVOLUP" onclick="sendData('volume_up')">VOLUME +</button>
+      <button type="button" class="buttonSTOP" onclick="sendData('stop')">STOP</button><br>
     </div>
     
     <div>

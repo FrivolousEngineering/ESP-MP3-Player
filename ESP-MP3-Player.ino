@@ -40,10 +40,10 @@ void handleRoot()
 
 void handlePLAYERCMD() 
 {
-  String PLAYERCMD = server.arg("PLAYERCMD"); //-> Variable string to hold commands from web page.
+  String command = server.arg("PLAYERCMD"); //-> Variable string to hold commands from web page.
   Serial.println();
-  Serial.println(PLAYERCMD);
-  if(PLAYERCMD == "PY")  
+  Serial.println(command);
+  if(command == "play")  
   {
     sendCommand(CMD_PLAY);
     PlayerStatSend = "PLAY";
@@ -51,7 +51,7 @@ void handlePLAYERCMD()
     Serial.println(PLAYERStatus);
     Serial.println();
   }
-  else if(PLAYERCMD == "PE") 
+  else if(command == "pause") 
   {
     sendCommand(CMD_PAUSE);
     SFB = true;
@@ -60,7 +60,7 @@ void handlePLAYERCMD()
     Serial.println(PLAYERStatus);
     Serial.println();
   }
-  else if(PLAYERCMD == "PV") 
+  else if(command == "previous") 
   {
     sendCommand(CMD_PREV_SONG);
     SFB = true;
@@ -69,7 +69,7 @@ void handlePLAYERCMD()
     Serial.println(PLAYERStatus);
     Serial.println();
   }
-  else if(PLAYERCMD == "NT") 
+  else if(command == "next") 
   {
     sendCommand(CMD_NEXT_SONG);
     SFB = true;
@@ -78,7 +78,7 @@ void handlePLAYERCMD()
     Serial.println(PLAYERStatus);
     Serial.println();
   }
-  else if(PLAYERCMD == "VD") 
+  else if(command == "volume_down") 
   {
     vol = vol - 2;
     if (vol < 0) 
@@ -93,7 +93,7 @@ void handlePLAYERCMD()
     Serial.println(vol);
     Serial.println();
   }
-  else if(PLAYERCMD == "VU") 
+  else if(command == "volume_up") 
   {
     vol=vol + 2;
     if (vol > 30)
@@ -108,7 +108,7 @@ void handlePLAYERCMD()
     Serial.println(vol);
     Serial.println();
   }
-  else if(PLAYERCMD == "SP") 
+  else if(command == "stop") 
   {
     sendCommand(CMD_STOP_PLAY);
     SFB = true;
@@ -230,7 +230,8 @@ String decodeMP3Answer()
 
   decodedMP3Answer += sanswer();
 
-  switch (answer_buffer[3]) {
+  switch (answer_buffer[3]) 
+  {
     case 0x3A:
       decodedMP3Answer += " -> Memory card inserted.";
       break;
@@ -309,7 +310,7 @@ void sendCommand(byte command, byte dat1, byte dat2)
     send_buffer[4] = 0x00;    
   }
 
-  Send_buf[5] = dat1;
+  send_buffer[5] = dat1;
   send_buffer[6] = dat2;
   send_buffer[7] = 0xEF;    //-> Ending byte of the command
   
