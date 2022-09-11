@@ -15,8 +15,6 @@ static uint8_t answer_buffer[10] = {0}; //-> Buffer to receive response.
 
 int vol = 30; 
 
-int cnt_3d = 0; //-> Variable as an indicator to continue to the next playback after the previous playback is finished.
-
 String player_status = "stop"; //-> //-> Variable string for all playback states displayed on the web page and monitor serial.
 String command_last_received = "stop"; //-> Variable string for playback status "PLAY" and "STOP" displayed on the web page.
 
@@ -52,7 +50,7 @@ void handlePLAYERCMD()
 
   String extra_serial_output = "";
 
-  command_last_received = command;
+  
   show_player_status = true;
   if(command == "play")  
   {
@@ -65,13 +63,14 @@ void handlePLAYERCMD()
       sendCommand(CMD_PLAY_W_INDEX, 0, current_song_index);
       extra_serial_output += "Once, Song index = " + String(current_song_index);
     }
-   
+    command_last_received = command;
     show_player_status = false;
     player_status = "play"; 
   }
   else if(command == "pause") 
   {
     sendCommand(CMD_PAUSE);
+    command_last_received = command;
     player_status = "pause"; 
   }
   else if(command == "previous") 
@@ -97,7 +96,7 @@ void handlePLAYERCMD()
   }
   else if(command == "volume_up") 
   {
-    vol=vol + 2;
+    vol = vol + 2;
     if (vol > 30)
     { 
       vol = 30;
@@ -110,9 +109,10 @@ void handlePLAYERCMD()
   {
     sendCommand(CMD_STOP_PLAY);
     player_status = "stop";
+    command_last_received = command;
   } else
   {
-    command_last_received = "";
+    command_last_received = "UNKNOWN";
     show_player_status = false;
   }
   Serial.print("Final command was: ");
@@ -280,14 +280,9 @@ String decodeMP3Answer()
 
   if (answer_buffer[3] == 0x3D) 
   { 
-    cnt_3d++;
-    if (cnt_3d == 2) 
-    {
-      player_status = "stop"; 
-      command_last_received = player_status;
-      Serial.println("MP3 player told us that STOP happend");
-      cnt_3d = 0;
-    }
+    player_status = "stop"; 
+    command_last_received = player_status;
+    Serial.println("MP3 player told us that STOP happend");
   }
 
   return decodedMP3Answer;
