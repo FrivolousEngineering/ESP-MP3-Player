@@ -103,10 +103,12 @@ const char WEB_PAGE[] PROGMEM = R"=====(
             
             // Example: if the data received for display is "30PLAY", then status = "30PLAY".
             // Then 30PLAY separated into 30 and PLAY.
+
+            var splitted = status.split(",");
             
-            document.getElementById("volume_display").innerHTML = status.slice(0, 2); // Get the first two characters from the response
+            document.getElementById("volume_display").innerHTML = splitted[0]
             
-            document.getElementById("command_display").innerHTML = status.slice(2, status.length); // Retrieve the state (everything that comes after!)
+            document.getElementById("command_display").innerHTML = splitted[1]
           }
         };
         xhttp.open("GET", "status", true);

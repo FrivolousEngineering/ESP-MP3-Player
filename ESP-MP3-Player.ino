@@ -140,7 +140,6 @@ void handlePLAYERCMD()
   server.send(200, "text/plane", "");
 }
 
-
 void handleStatusRequest() 
 {
   String  player_status_feedback = "";
@@ -190,7 +189,7 @@ void handleStatusRequest()
     player_status_feedback = command_last_received;
   }
 
-  server.send(200, "text/plane", volume_string + player_status_feedback); 
+  server.send(200, "text/plane", volume_string + "," + player_status_feedback); 
 }
 
 void setup()
