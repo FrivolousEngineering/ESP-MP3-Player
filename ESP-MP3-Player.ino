@@ -178,12 +178,9 @@ void setup()
   Serial.begin(9600);
   mp3.begin(9600);
   pinMode(BUILTIN_LED, OUTPUT); // Register built in led
-  
-  delay(250);
-  
+
   Serial.println("Begin");
-  delay(250);
-  
+
   WiFi.softAP(ssid, password);  // Start the soft Acces Point
 
   IPAddress our_ip = WiFi.softAPIP(); 
@@ -192,7 +189,6 @@ void setup()
   Serial.print("Our IP is: ");
   Serial.println(our_ip); 
   
- 
   // Setup callbacks for the various endpoints
   server.on("/", handleRoot); //--> Routine to handle at root location. This is to display web page.
   server.on("/setPLAYER", handlePLAYERCMD);  //--> Routine to handle the call procedure handlePLAYERCMD.
@@ -200,7 +196,6 @@ void setup()
   
   server.begin(); //--> Start server
   Serial.println("HTTP server started\n");
-  delay(250);
   
   Serial.println("Select storage device to TF card.");
   sendCommand(CMD_SEL_DEV, 0, DEV_TF);
