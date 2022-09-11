@@ -70,6 +70,17 @@ void handleRoot()
   server.send(200, "text/html", WEB_PAGE); //-> Send web page
 }
 
+String getAllTracksAsString()
+{
+  String result = "";
+  for (String name: track_names)
+  {
+    result += name + ",";
+  }
+  // Remove the last ','
+  return result.substring(0, result.length() - 1);
+}
+
 void handleCommand() 
 {
   String command = server.arg("cmd"); //-> Variable string to hold commands from web page.
