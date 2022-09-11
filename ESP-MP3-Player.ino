@@ -143,15 +143,7 @@ void handlePLAYERCMD()
 void handleStatusRequest() 
 {
   String  player_status_feedback = "";
-  String volume_string;
-  if (volume < 10) 
-  {
-    volume_string = "0" + String(volume);
-  }
-  else 
-  {
-    volume_string = String(volume);
-  }
+  String volume_string = String(volume);
 
   unsigned long current_time = millis();
   if (current_time - previous_feedback_time >= feedback_update_interval) 
