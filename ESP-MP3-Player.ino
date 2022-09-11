@@ -33,6 +33,9 @@ bool FFB = true; // Variable as an indicator to get feedback from the Serial MP3
 bool show_player_status = false;
 int intv = 0; //-> The variable for the interval displays the PLAYERStatus.
 
+int current_song_index = 0;
+int num_total_songs = 0;
+
 void handleRoot() 
 {
   server.send(200, "text/html", WEB_PAGE); //-> Send web page
@@ -113,7 +116,6 @@ void handlePLAYERCMD()
     command_last_received = "";
     show_player_status = false;
   }
-
   server.send(200, "text/plane", "");
 }
 
@@ -207,6 +209,9 @@ void setup()
   sendCommand(CMD_SET_VOLUME, 0, vol);
   delay(250);
 
+  Serial.println("Requesting num of tracks available");
+  sendCommand(CMD_QUERY_TOT_TRACKS);
+
   FFB = false;
 }
 
@@ -251,7 +256,7 @@ String decodeMP3Answer()
       break;
 
     case 0x41:
-      decodedMP3Answer += " -> Data recived correctly. ";
+      decodedMP3Answer += " -> Data recived correctly.";
       break;
 
     case 0x42:
@@ -260,6 +265,7 @@ String decodeMP3Answer()
 
     case 0x48:
       decodedMP3Answer += " -> File count: " + String(answer_buffer[6], DEC);
+      num_total_songs = (int) answer_buffer[6];
       break;
 
     case 0x4C:
